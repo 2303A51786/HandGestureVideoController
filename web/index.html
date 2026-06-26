@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Gesture Video Controller 🎥🖐️</title>
+    <!-- Google Fonts for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- MediaPipe CDN scripts (Legacy versions, highly stable and client-side only) -->
+    <!-- 1. camera_utils.js: Handles streaming frames from the webcam to the browser -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <!-- 2. hands.js: Google's pre-trained hand-tracking neural network model -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <!-- 3. drawing_utils.js: Helper script to draw connections and keypoint circles on canvas -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- HEADER HUD -->
+        <header class="hud-header">
+            <div class="logo">
+                <span class="pulse-dot"></span>
+                <h1>GESTURE.IO</h1>
+            </div>
+            <div class="hud-info">
+                <div class="status-container">
+                    <span class="label">STATUS:</span>
+                    <span id="status-text" class="status-listening">Initializing model...</span>
+                </div>
+                <div class="fps-container">
+                    <span class="label">FPS:</span>
+                    <span id="fps-text">0.0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN MEDIA PLAYER AREA -->
+        <main class="player-area">
+            <div class="video-wrapper">
+                <!-- HTML5 Video Player playing a beautiful sample landscape video -->
+                <video id="video-player" loop muted playsinline>
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                
+                <!-- Action trigger notification overlay (glowing text popup on play/pause/ffwd) -->
+                <div id="action-overlay" class="action-overlay-hidden">PLAY</div>
+                
+                <!-- Volume feedback overlay bar -->
+                <div id="volume-card" class="volume-card-hidden">
+                    <div class="volume-icon">🔊</div>
+                    <div class="volume-bar-bg">
+                        <div id="volume-bar-fill" style="width: 50%;"></div>
+                    </div>
+                    <div id="volume-percent">50%</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER INSTRUCTION PANEL -->
+        <footer class="instruction-bar">
+            <div class="tip">✌️ Victory = Play/Pause</div>
+            <div class="divider">|</div>
+            <div class="tip">🤟 3 Fingers = FFWD (10s)</div>
+            <div class="divider">|</div>
+            <div class="tip">☝️ Index Up = Rewind (10s)</div>
+            <div class="divider">|</div>
+            <div class="tip">🤏 Thumb + Index = Volume (Pinch / Spread)</div>
+        </footer>
+    </div>
+
+    <!-- WEBCAM PREVIEW FLOATING CARD -->
+    <div class="webcam-card">
+        <!-- The active hidden video stream that captures the camera -->
+        <video id="webcam" autoplay playsinline muted></video>
+        <!-- The canvas that sits directly over the webcam stream to draw landmark points -->
+        <canvas id="canvas-overlay" width="640" height="480"></canvas>
+        <div class="webcam-label">Webcam Monitor</div>
+    </div>
+
+    <!-- Main JavaScript Code -->
+    <script src="app.js"></script>
+</body>
+</html>
